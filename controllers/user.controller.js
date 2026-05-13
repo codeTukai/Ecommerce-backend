@@ -41,7 +41,9 @@ export async function registerUserController(request, response) {
     }
 
     //  Check if user already exists
-    const existingUser = await UserModel.findOne({ email });
+    const existingUser = await UserModel.findOne({ email }).select(
+        "-password -refreshToken"
+    )
     if (existingUser) {
       return response.status(409).json({
         message: "User already registered with this email",
@@ -72,7 +74,7 @@ export async function registerUserController(request, response) {
     //  Send verification email with correct arguments
     try {
       await sendEmailFun(email, otp, name);
-      console.log("📧 Verification email sent to:", email);
+      console.log(" Verification email sent to:", email);
     } catch (emailError) {
       console.error(" Email Sending Error:", emailError.message);
     }
