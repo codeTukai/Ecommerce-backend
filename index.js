@@ -12,7 +12,7 @@ import userRouter from './route/user.route.js'; //  User routes
 import categoryRouter from './route/category.route.js'; //  Category routes
 import productRouter from './route/product.route.js';
 import cartRouter from './route/cart.route.js';
-import myListRouter from './route/myList.route.js';
+import myListRouter from './route/mylist.route.js'
 import homeSliderRouter from './route/homeSlider.route.js';
 
 
