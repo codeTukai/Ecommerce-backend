@@ -25,10 +25,11 @@ const app = express();
 
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN, // your frontend origin
+  origin: "http://localhost:5173", // your frontend origin
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true, //  needed if using cookies or Authorization header
 }));
+
 
 
 //  Security headers (disable CSP if needed)
@@ -36,8 +37,8 @@ app.use(helmet({
   contentSecurityPolicy: false,
 }));
 
-//  Parse cookies & 
-app.use(express.json({limit: "16kb"})) //data request via form
+//  Parse cookies & JSON
+
 app.use(express.urlencoded({
     extended: true,
     limit: "16kb"

@@ -74,7 +74,7 @@ export async function registerUserController(request, response) {
       await sendEmailFun(email, otp, name);
       console.log("📧 Verification email sent to:", email);
     } catch (emailError) {
-      console.error("❌ Email Sending Error:", emailError.message);
+      console.error(" Email Sending Error:", emailError.message);
     }
 
     //  Generate JWT token
