@@ -16,6 +16,8 @@ cloudinary.config({
   secure : true,
 });
 
+console.log(process.env.cloudinary_Config_api_secret);
+
 export async function uploadImages(request, response) {
   try {
     const imagesArr = [];

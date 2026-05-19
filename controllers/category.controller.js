@@ -10,21 +10,18 @@ import fs from 'fs';
 dotenv.config(); // Load .env
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
+  cloud_name: process.env.cloudinary_Config_Cloud_Name,
+  api_key:process.env.cloudinary_Config_api_key, 
+  api_secret:process.env.cloudinary_Config_api_secret, 
+  secure : true,
 });
 
 export default cloudinary;
 
 
 
-// console.log(process.env.CLOUDINARY_CLOUD_NAME);
-// console.log(process.env.CLOUDINARY_API_KEY);
-// console.log(process.env.CLOUDINARY_API_SECRET);
 
-// export default cloudinary;
+
 
 //  Image Upload Controller
 
@@ -36,7 +33,7 @@ export async function uploadImages(request, response) {
     const imagesArr = [];
 
     const images = request.files || [];
-    console.log(images);
+    // console.log(images);
     
 
     if (images.length === 0) {

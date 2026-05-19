@@ -18,6 +18,9 @@ cloudinary.config({
   secure : true,
 });
 
+console.log(process.env.cloudinary_Config_api_key);
+
+
 
 export async function uploadImages(req, res) {
   try {
