@@ -9,24 +9,42 @@ import fs from 'fs';
 
 dotenv.config(); // Load .env
 
-cloudinary.config({ 
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-  api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_API_SECRET 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
 });
-console.log(process.env.CLOUDINARY_CLOUD_NAME);
-console.log(process.env.CLOUDINARY_API_KEY);
-console.log(process.env.CLOUDINARY_API_SECRET);
 
 export default cloudinary;
 
+
+
+// console.log(process.env.CLOUDINARY_CLOUD_NAME);
+// console.log(process.env.CLOUDINARY_API_KEY);
+// console.log(process.env.CLOUDINARY_API_SECRET);
+
+// export default cloudinary;
+
 //  Image Upload Controller
-let imagesArr = [];
 
 export async function uploadImages(request, response) {
   try {
-    imagesArr = [];
-    const images = request.files;
+
+    // console.log("FILES => ", request.files);
+
+    const imagesArr = [];
+
+    const images = request.files || [];
+    console.log(images);
+    
+
+    if (images.length === 0) {
+      return response.status(400).json({
+        success: false,
+        message: "No files uploaded",
+      });
+    }
 
     const options = {
       use_filename: true,
@@ -35,9 +53,17 @@ export async function uploadImages(request, response) {
     };
 
     for (let i = 0; i < images.length; i++) {
-      const result = await cloudinary.uploader.upload(images[i].path, options);
+
+      console.log(images[i].path);
+
+      const result = await cloudinary.uploader.upload(
+        images[i].path,
+        options
+      );
+
       imagesArr.push(result.secure_url);
-      fs.unlinkSync(images[i].path); // Clean up temp file
+
+      fs.unlinkSync(images[i].path);
     }
 
     return response.status(200).json({
@@ -46,6 +72,9 @@ export async function uploadImages(request, response) {
     });
 
   } catch (error) {
+
+    console.log("UPLOAD ERROR => ", error);
+
     return response.status(500).json({
       message: error.message || error,
       error: true,
@@ -54,9 +83,16 @@ export async function uploadImages(request, response) {
   }
 }
 
+console.log(uploadImages);
+
+
+
 export async function createCategory(req, res) {
   try {
     const { name, images, parentId, parentCatName } = req.body;
+
+    // console.log(images);
+    
 
     //  Only check if images is an array (allow empty array)
     if (!name || !Array.isArray(images)) {
