@@ -18,7 +18,7 @@ cloudinary.config({
   secure : true,
 });
 
-console.log(process.env.cloudinary_Config_api_key);
+// console.log(process.env.cloudinary_Config_api_key);
 
 
 

@@ -5,7 +5,7 @@ const auth = async (req, res, next) => {
   try {
     let token = null;
 
-    //  1. Check Authorization Header
+    //   Check Authorization Header
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer ")
@@ -13,12 +13,12 @@ const auth = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
 
-    //  2. Fallback: Check cookie token
+    //   Fallback: Check cookie token
     if (!token && req.cookies?.accessToken) {
       token = req.cookies.accessToken;
     }
 
-    //  3. Fallback: Check query param token
+    //   Fallback: Check query param token
     if (!token && req.query?.token) {
       token = req.query.token;
     }
@@ -32,7 +32,7 @@ const auth = async (req, res, next) => {
       });
     }
 
-    //  4. Verify Token
+    //  Verify Token
     const decoded = jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN);
 
     if (!decoded?.id) {
@@ -43,7 +43,7 @@ const auth = async (req, res, next) => {
       });
     }
 
-    //  5. Attach user info to request
+    //   Attach user info to request
     req.userId = decoded.id;
     req.token = token;
     next();

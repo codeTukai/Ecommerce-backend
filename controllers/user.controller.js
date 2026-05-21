@@ -21,7 +21,7 @@ cloudinary.config({
   secure : true,
 });
 
-console.log(process.env.cloudinary_Config_Cloud_Name);
+// console.log(process.env.cloudinary_Config_Cloud_Name);
 
 
 // Exported controller with correct params
