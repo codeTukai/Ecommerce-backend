@@ -33,7 +33,7 @@ export async function uploadImages(request, response) {
     const imagesArr = [];
 
     const images = request.files || [];
-    // console.log(images);
+    console.log(images);
     
 
     if (images.length === 0) {
