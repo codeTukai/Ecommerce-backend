@@ -373,14 +373,14 @@ export async function updatedCategory(req, res) {
       parentCatName = ""
     } = req.body;
 
-    // Fallback: if images array is valid, take first image
+
     const finalImage = Array.isArray(images) && images.length > 0 ? images[0] : null;
 
     const updated = await CategoryModel.findByIdAndUpdate(
       req.params.id,
       {
         name,
-        images: finalImage, // Assuming schema only supports 1 image; adjust if needed
+        images: finalImage, 
         parentId,
         parentCatName
       },
