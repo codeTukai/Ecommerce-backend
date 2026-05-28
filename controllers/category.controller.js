@@ -3,11 +3,11 @@ import CategoryModel from '../models/category.model.js';
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
 
-// utils/cloudinary.js
 
 
 
-dotenv.config(); // Load .env
+
+dotenv.config(); 
 
 cloudinary.config({
   cloud_name: process.env.cloudinary_Config_Cloud_Name,
@@ -28,12 +28,12 @@ export default cloudinary;
 export async function uploadImages(request, response) {
   try {
 
-    // console.log("FILES => ", request.files);
+   
 
     const imagesArr = [];
 
     const images = request.files || [];
-    // console.log(images);
+  
     
 
     if (images.length === 0) {
@@ -88,10 +88,9 @@ export async function createCategory(req, res) {
   try {
     const { name, images, parentId, parentCatName } = req.body;
 
-    // console.log(images);
+    
     
 
-    //  Only check if images is an array (allow empty array)
     if (!name || !Array.isArray(images)) {
       return res.status(400).json({
         message: "Name is required and images must be an array.",
@@ -100,7 +99,7 @@ export async function createCategory(req, res) {
       });
     }
 
-    //  Check for duplicate name under same parentId
+   
     const existing = await CategoryModel.findOne({
       name: name.trim(),
       parentId: parentId || null,
@@ -224,7 +223,7 @@ export async function getCategoriesCount(request, response) {
 
 export async function getSubCategoriesCount(req, res) {
   try {
-    // Find all categories that have a parentId defined (i.e., are subcategories)
+   
     const subCategories = await CategoryModel.find({ parentId: { $ne: null } });
 
     res.status(200).json({
