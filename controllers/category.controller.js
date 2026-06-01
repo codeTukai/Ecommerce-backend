@@ -23,7 +23,7 @@ export default cloudinary;
 
 
 
-//  Image Upload Controller
+
 
 export async function uploadImages(request, response) {
   try {
@@ -50,8 +50,6 @@ export async function uploadImages(request, response) {
     };
 
     for (let i = 0; i < images.length; i++) {
-
-      console.log(images[i].path);
 
       const result = await cloudinary.uploader.upload(
         images[i].path,
@@ -80,7 +78,7 @@ export async function uploadImages(request, response) {
   }
 }
 
-console.log(uploadImages);
+// console.log(uploadImages);
 
 
 
