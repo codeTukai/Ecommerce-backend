@@ -61,6 +61,7 @@ export async function uploadImages(request, response) {
       fs.unlinkSync(images[i].path);
     }
 
+    
     return response.status(200).json({
       images: imagesArr,
       success: true,
@@ -301,7 +302,7 @@ export async function removeImageFromCloudinary(request, response) {
 
 
 
-//delete
+//delete category
 
 
 export async function deleteCategory(request, response){
@@ -360,7 +361,7 @@ export async function deleteCategory(request, response){
 }
 
 
-
+//update category
 
 export async function updatedCategory(req, res) {
   try {
