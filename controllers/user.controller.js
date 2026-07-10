@@ -21,10 +21,7 @@ cloudinary.config({
   secure : true,
 });
 
-// console.log(process.env.cloudinary_Config_Cloud_Name);
 
-
-// Exported controller with correct params
 
 
 
@@ -37,7 +34,7 @@ export async function registerUserController(request, response) {
     //  Input validation
     if (!name || !email || !password) {
       return response.status(400).json({
-        message: "Please provide name, email, and password",
+        message: "Please provide name, email and password",
         error: true,
         success: false,
       });
@@ -72,7 +69,7 @@ export async function registerUserController(request, response) {
     });
 
     await newUser.save();
-    console.log("User saved successfully:", newUser.email);
+    // console.log("User saved successfully:", newUser.email);
 
     //  Send verification email with correct arguments
     try {
@@ -125,9 +122,9 @@ export async function verifyEmailController(request, response) {
       });
     }
 
-    console.log("Received OTP:", otp);
-    console.log("User OTP:", user.otp);
-    console.log("OTP Expire:", user.otpExpire);
+    // console.log("Received OTP:", otp);
+    // console.log("User OTP:", user.otp);
+    // console.log("OTP Expire:", user.otpExpire);
 
     const isCodeValid = user.otp === otp;
     const isNotExpired = user.otpExpire && user.otpExpire > Date.now();

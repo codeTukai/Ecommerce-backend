@@ -13,12 +13,12 @@ const auth = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
 
-    //   Fallback: Check cookie token
+    //   cookie token
     if (!token && req.cookies?.accessToken) {
       token = req.cookies.accessToken;
     }
 
-    //   Fallback: Check query param token
+    //  param token
     if (!token && req.query?.token) {
       token = req.query.token;
     }
