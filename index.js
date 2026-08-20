@@ -6,6 +6,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
+import dns from 'dns'
 
 import connectDB from './config/connectDB.js'; //  DB connection
 import userRouter from './route/user.route.js'; //  User routes
@@ -23,7 +25,7 @@ const app = express();
 
 //  Allow frontend (React) to access API with cookies/tokens
 
-
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -71,6 +73,7 @@ import CategoryModel from './models/category.model.js'; // Adjust path if needed
 
 
 const PORT = process.env.PORT || 8000;
+mongoose
 connectDB()
   .then(async () => {
     console.log(" MongoDB connected");
