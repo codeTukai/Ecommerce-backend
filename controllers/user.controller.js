@@ -29,12 +29,12 @@ cloudinary.config({
 
 export async function registerUserController(request, response) {
   try {
-    const { name, email, password } = request.body;
+    const { name, email, password, role } = request.body;
 
     //  Input validation
-    if (!name || !email || !password) {
+    if (!name || !email || !password| !role) {
       return response.status(400).json({
-        message: "Please provide name, email and password",
+        message: "Please provide name, email and password or role specific details",
         error: true,
         success: false,
       });
@@ -63,6 +63,7 @@ export async function registerUserController(request, response) {
     const newUser = new UserModel({
       name,
       email,
+      role:role,
       password: hashPassword,
       otp,
       otpExpire: Date.now() + 10 * 60 * 1000,
@@ -90,7 +91,6 @@ export async function registerUserController(request, response) {
       success: true,
       error: false,
       message: "User registered successfully. Please verify your email.",
-      token,
     });
 
   } catch (error) {
