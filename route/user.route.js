@@ -27,7 +27,6 @@ userRouter.post('/register', registerUserController);
 // Email verification
 userRouter.post('/verifyEmail', verifyEmailController);
 
-// User login
 userRouter.post('/login', loginUserController);
 
 // User logout (protected route)

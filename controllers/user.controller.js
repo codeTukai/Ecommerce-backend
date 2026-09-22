@@ -80,11 +80,11 @@ export async function registerUserController(request, response) {
     }
 
     //  Generate JWT token
-    const token = jwt.sign(
-      { email: newUser.email, id: newUser._id },
-      process.env.JSON_WEB_TOKEN_SECRET_KEY,
-      { expiresIn: "10m" }
-    );
+    // const token = jwt.sign(
+    //   { email: newUser.email, id: newUser._id },
+    //   process.env.JSON_WEB_TOKEN_SECRET_KEY,
+    //   { expiresIn: "10m" }
+    // );
 
     return response.status(200).json({
       success: true,
