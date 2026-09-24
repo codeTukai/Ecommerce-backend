@@ -1,24 +1,13 @@
 import homeSliderModel from "../models/homeSlider.model.js";
 
-import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs';
 
-// utils/cloudinary.js
 
-import dotenv from "dotenv";
-import { error } from "console";
+
 import HomeSliderModel from "../models/homeSlider.model.js";
 
-dotenv.config(); // Load .env
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-cloudinary.config({
-  cloud_name: process.env.cloudinary_Config_Cloud_Name,
-  api_key:process.env.cloudinary_Config_api_key, 
-  api_secret:process.env.cloudinary_Config_api_secret, 
-  secure : true,
-});
 
-// console.log(process.env.cloudinary_Config_api_key);
 
 
 
@@ -34,7 +23,7 @@ export async function uploadImages(req, res) {
     };
 
     for (const file of images) {
-      const result = await cloudinary.uploader.upload(file.path, options);
+      const result = await uploadOnCloudinary.upload(file.path, options);
       imageUrls.push(result.secure_url);
       fs.unlinkSync(file.path); // remove temp file
     }
@@ -177,7 +166,7 @@ export async function removeImageFromCloudinary(request, response) {
   const imageName = image.split(".")[0];
 
   if(imageName){
-    const res = await cloudinary.uploader.destroy(
+    const res = await uploadOnCloudinary.destroy(
     imageName,
     (error, result) => {
         // console.log(error, res)
@@ -213,7 +202,7 @@ export async function deleteHomeSlider(request, response) {
       const imageName = image.split(".")[0];
 
       if (imageName) {
-        await cloudinary.uploader.destroy(imageName);
+        await uploadOnCloudinary.destroy(imageName);
       }
     }
 
@@ -310,7 +299,7 @@ export async function deleteMultipleSlides(req, res) {
           const publicId = image.split(".")[0]; // Remove extension
 
           if (publicId) {
-            deleteImagePromises.push(cloudinary.uploader.destroy(publicId));
+            deleteImagePromises.push(uploadOnCloudinary.destroy(publicId));
           }
         } catch (err) {
           console.warn("Image deletion error (ignored):", imgUrl, err.message);

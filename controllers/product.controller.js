@@ -2,21 +2,12 @@ import ProductModel from "../models/product.modal.js";
 import ProductRAMSModel from "../models/productRAMS.js";
 import ProductWeightModel from "../models/productWeight.js";
 import ProductSizeModel from "../models/productSize.js";
-
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 
-import { v2 as cloudinary }  from 'cloudinary';
-import { error } from "console";
-import fs from 'fs';
 
-cloudinary.config({
-  cloud_name: process.env.cloudinary_Config_Cloud_Name,
-  api_key:process.env.cloudinary_Config_api_key, 
-  api_secret:process.env.cloudinary_Config_api_secret, 
-  secure : true,
-});
 
-// console.log(process.env.cloudinary_Config_api_secret);
+
 
 export async function uploadImages(request, response) {
   try {
@@ -32,7 +23,7 @@ export async function uploadImages(request, response) {
 
    for (let i = 0; i < image?.length; i++) {
 
-      const img = await cloudinary.uploader.upload(
+      const img = await uploadOnCloudinary.upload(
         image[i].path,
         options,
         function (error, result) {
@@ -83,7 +74,7 @@ export async function uploadBannerImages(request, response) {
 
     // Upload all images in parallel
     const uploadPromises = images.map(async (file) => {
-      const result = await cloudinary.uploader.upload(file.path, options);
+      const result = await uploadOnCloudinary.upload(file.path, options);
       bannerImages.push(result.secure_url);
       fs.unlinkSync(file.path); // Clean up local file
     });
@@ -773,7 +764,7 @@ export async function deleteProduct(request, response){
         const imageName = image.split(".")[0];
 
         if (imageName) {
-            cloudinary.uploader.destroy (imageName, (error, result) => {
+            uploadOnCloudinary.destroy (imageName, (error, result) => {
                 // console.log(error, result);
             });
 
@@ -828,7 +819,7 @@ export async function deleteMultipleProducts(req, res) {
 
         if (imageName) {
           deleteImagePromises.push(
-            cloudinary.uploader.destroy(imageName)
+            uploadOnCloudinary.destroy(imageName)
           );
         }
       }
@@ -892,7 +883,7 @@ export async function removeImageFromCloudinary(request, response) {
   const imageName = image.split(".")[0];
 
   if(imageName){
-    const res = await cloudinary.uploader.destroy(
+    const res = await uploadOnCloudinary.destroy(
     imageName,
     (error, result) => {
          console.log(error, res)

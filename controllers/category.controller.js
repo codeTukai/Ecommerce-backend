@@ -1,28 +1,6 @@
 import dotenv from "dotenv";
 import CategoryModel from '../models/category.model.js';
-import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs';
-
-
-
-
-
-dotenv.config(); 
-
-cloudinary.config({
-  cloud_name: process.env.cloudinary_Config_Cloud_Name,
-  api_key:process.env.cloudinary_Config_api_key, 
-  api_secret:process.env.cloudinary_Config_api_secret, 
-  secure : true,
-});
-
-export default cloudinary;
-
-
-
-
-
-
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 
 export async function uploadImages(request, response) {
@@ -51,7 +29,7 @@ export async function uploadImages(request, response) {
 
     for (let i = 0; i < images.length; i++) {
 
-      const result = await cloudinary.uploader.upload(
+      const result = await uploadOnCloudinary.upload(
         images[i].path,
         options
       );
@@ -284,7 +262,7 @@ export async function removeImageFromCloudinary(request, response) {
   const imageName = image.split(".")[0];
 
   if(imageName){
-    const res = await cloudinary.uploader.destroy(
+    const res = await uploadOnCloudinary.destroy(
     imageName,
     (error, result) => {
         // console.log(error, res)
@@ -318,7 +296,7 @@ export async function deleteCategory(request, response){
         const imageName = image.split(".")[0];
 
         if(imageName){
-            cloudinary.uploader.destroy (imageName, (error, result) => {
+            uploadOnCloudinary.destroy (imageName, (error, result) => {
             // console.log(error, result);
             });
 

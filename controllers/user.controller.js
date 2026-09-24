@@ -10,22 +10,7 @@ import sendEmailFun from "../config/sendEmail.js"; //  correct for default expor
 import verificationEmail from "../utils/verifyEmailTemplate.js";
 import generatedAccessToken from '../utils/generatedAccessToken.js';
 import generatedRefreshToken from '../utils/generatedRefreshToken.js';
-import { v2 as cloudinary }  from 'cloudinary';
-
-import fs from 'fs';
-
-cloudinary.config({
-  cloud_name: process.env.cloudinary_Config_Cloud_Name,
-  api_key:process.env.cloudinary_Config_api_key, 
-  api_secret:process.env.cloudinary_Config_api_secret, 
-  secure : true,
-});
-
-
-
-
-
-
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 export async function registerUserController(request, response) {
   try {
@@ -313,7 +298,7 @@ export async function userAvatarController(request, response) {
       const imageName = avatarImage.split(".")[0];
 
       if (imageName) {
-        await cloudinary.uploader.destroy(imageName);
+        await uploadOnCloudinary.destroy(imageName);
       }
     }
 
@@ -324,7 +309,7 @@ export async function userAvatarController(request, response) {
     };
 
     for (let i = 0; i < image?.length; i++) {
-      const result = await cloudinary.uploader.upload(
+      const result = await uploadOnCloudinary.upload(
         image[i].path,
         options
       );
@@ -382,7 +367,7 @@ export async function removeImageFromCloudinary(request, response) {
 
    
 
-    const result = await cloudinary.uploader.destroy(publicId);
+    const result = await uploadOnCloudinary.destroy(publicId);
 
     if (result.result === "ok") {
       return response.status(200).json({
