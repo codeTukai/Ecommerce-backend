@@ -1,11 +1,10 @@
-import dotenv from "dotenv";
-dotenv.config();
+
 import UserModel from '../models/user.model.js';
 import bcryptjs from 'bcryptjs';
 import bcrypt from "bcrypt";
 
 import jwt from 'jsonwebtoken';
-import sendEmailFun from "../config/sendEmail.js"; //  correct for default export
+import sendEmailFun from "../config/sendEmail.js"; 
 
 import verificationEmail from "../utils/verifyEmailTemplate.js";
 import generatedAccessToken from '../utils/generatedAccessToken.js';
@@ -14,12 +13,12 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 export async function registerUserController(request, response) {
   try {
-    const { name, email, password, role } = request.body;
+    const { name, email, password} = request.body;
 
     //  Input validation
-    if (!name || !email || !password| !role) {
+    if (!name || !email || !password) {
       return response.status(400).json({
-        message: "Please provide name, email and password or role specific details",
+        message: "Please provide name, email and password ",
         error: true,
         success: false,
       });
@@ -48,7 +47,7 @@ export async function registerUserController(request, response) {
     const newUser = new UserModel({
       name,
       email,
-      role:role,
+      role:"USER",
       password: hashPassword,
       otp,
       otpExpire: Date.now() + 10 * 60 * 1000,
@@ -57,7 +56,6 @@ export async function registerUserController(request, response) {
     await newUser.save();
     // console.log("User saved successfully:", newUser.email);
 
-    //  Send verification email with correct arguments
     try {
       await sendEmailFun(email, otp, name);
       console.log(" Verification email sent to:", email);
@@ -65,12 +63,12 @@ export async function registerUserController(request, response) {
       console.error(" Email Sending Error:", emailError.message);
     }
 
-    //  Generate JWT token
-    // const token = jwt.sign(
-    //   { email: newUser.email, id: newUser._id },
-    //   process.env.JSON_WEB_TOKEN_SECRET_KEY,
-    //   { expiresIn: "10m" }
-    // );
+   
+    const token = jwt.sign(
+      { email: newUser.email, id: newUser._id },
+      process.env.JSON_WEB_TOKEN_SECRET_KEY,
+      { expiresIn: "10m" }
+    );
 
     return response.status(200).json({
       success: true,
@@ -166,6 +164,8 @@ export async function loginUserController(request, response) {
       });
     }
 
+   
+
     //  Block unverified users
     if (!user.verify_email) {
       return response.status(403).json({
@@ -187,6 +187,8 @@ export async function loginUserController(request, response) {
 
     //  Generate tokens
     const accesstoken = await generatedAccessToken(user._id);
+    console.log("access token", accesstoken);
+    
     const refreshToken = await generatedRefreshToken(user._id);
 
     //  Save tokens and login time
