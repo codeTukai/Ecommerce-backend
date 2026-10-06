@@ -1,30 +1,31 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import nodemailer from "nodemailer";
 
-// Gmail-based transporter
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL, 
-      pass: process.env.EMAIL_PASS, 
-    },
-    debug: true,
-    logger: true,
-  });
-};
+console.log("EMAIL:", process.env.EMAIL);
+console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
 
 
-export const sendEmail = async (to, subject, text = "", html = "") => {
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASS,
+  },
+  logger: true,
+  debug: true,
+});
+
+export const sendEmail = async (
+  to,
+  subject,
+  text = "",
+  html = ""
+) => {
   try {
-    console.log("Attempting to send email to:", to);
-
-    // You can switch between createTransporter() and createCustomTransporter()
-    const transporter = createTransporter();
-
-    await transporter.verify();
-    console.log(" SMTP connection verified");
-
-    const mailOptions = {
+    const result = await transporter.sendMail({
       from: {
         name: "EasyCart Support",
         address: process.env.EMAIL,
@@ -33,17 +34,9 @@ export const sendEmail = async (to, subject, text = "", html = "") => {
       subject,
       text,
       html,
-    };
-
-    console.log(" Sending email with:", {
-      to,
-      subject,
-      preview: html.substring(0, 100) + "...",
     });
 
-    const result = await transporter.sendMail(mailOptions);
-
-    console.log(" Email sent:", result.messageId);
+    console.log("✅ Email sent:", result.messageId);
 
     return {
       success: true,
@@ -51,10 +44,7 @@ export const sendEmail = async (to, subject, text = "", html = "") => {
       accepted: result.accepted,
     };
   } catch (error) {
-    console.error(" Email failed:", {
-      message: error.message,
-      code: error.code,
-    });
+    console.error("❌ Email failed:", error.message);
 
     return {
       success: false,

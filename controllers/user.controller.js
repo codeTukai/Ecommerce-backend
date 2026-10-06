@@ -45,51 +45,51 @@ export async function registerUserController(request, response) {
     const hashPassword = await bcryptjs.hash(password, salt);
 
     //  Save user
-    const newUser = new UserModel({
+    // const newUser = new UserModel({
+    //   name,
+    //   email,
+    //   role:"USER",
+    //   password: hashPassword,
+    //   otp,
+    //   otpExpire: Date.now() + 10 * 60 * 1000,
+    // });
+
+    // await newUser.save();
+    const createUser = await UserModel.create({
       name,
       email,
       role:"USER",
       password: hashPassword,
       otp,
       otpExpire: Date.now() + 10 * 60 * 1000,
-    });
-
-    await newUser.save();
+    })
     // console.log("User saved successfully:", newUser.email);
 
-    try {
-      await sendEmailFun(email, otp, name);
-      console.log(" Verification email sent to:", email);
-    } catch (emailError) {
-      console.error(" Email Sending Error:", emailError.message);
-    }
+   try {
+  const emailResult = await sendEmailFun(email, otp, name);
 
-    try {
-      const emailResult = await sendEmailFun(email, otp, name)
-      console.log(emailResult);
-      
+  console.log("EMAIL RESULT:", emailResult);
 
-      if (!emailResult.success) {
-        console.log("Error while otp sending to email");
-      }else{
-        console.log("otp successfully send to the mail");
-        
-      }
-    } catch (error) {
-      console.error(" Email Sending Error:", emailError.message);
-    }
+  if (!emailResult.success) {
+    console.log("❌ Error while sending OTP to email:", emailResult.error);
+  } else {
+    console.log("✅ OTP successfully sent to the mail");
+  }
+
+} catch (error) {
+  console.error("❌ Email Sending Error:", error.message);
+}
 
    
-    const token = jwt.sign(
-      { email: newUser.email, id: newUser._id },
-      process.env.JSON_WEB_TOKEN_SECRET_KEY,
-      { expiresIn: "10m" }
-    );
+    // const token = jwt.sign(
+    //   { email: newUser.email, id: newUser._id },
+    //   process.env.JSON_WEB_TOKEN_SECRET_KEY,
+    //   { expiresIn: "10m" }
+    // );
 
     return response.status(200).json({
       success: true,
       error: false,
-      token,
       message: "User registered successfully. Please verify your email.",
     });
 
