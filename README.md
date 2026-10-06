@@ -23,6 +23,7 @@ A robust backend server for an ecommerce platform built with Node.js.
 npm install
 ```
 
+
 ## Configuration
 
 Create a `.env` file in the root directory with the following variables:
