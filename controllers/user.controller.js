@@ -38,6 +38,7 @@ export async function registerUserController(request, response) {
 
     //  Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
 
     //  Hash password
     const salt = await bcryptjs.genSalt(10);
@@ -63,6 +64,21 @@ export async function registerUserController(request, response) {
       console.error(" Email Sending Error:", emailError.message);
     }
 
+    try {
+      const emailResult = await sendEmailFun(email, otp, name)
+      console.log(emailResult);
+      
+
+      if (!emailResult.success) {
+        console.log("Error while otp sending to email");
+      }else{
+        console.log("otp successfully send to the mail");
+        
+      }
+    } catch (error) {
+      console.error(" Email Sending Error:", emailError.message);
+    }
+
    
     const token = jwt.sign(
       { email: newUser.email, id: newUser._id },
@@ -73,6 +89,7 @@ export async function registerUserController(request, response) {
     return response.status(200).json({
       success: true,
       error: false,
+      token,
       message: "User registered successfully. Please verify your email.",
     });
 

@@ -13,21 +13,6 @@ const createTransporter = () => {
   });
 };
 
-// Custom SMTP transporter
-const createCustomTransporter = () => {
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
-};
 
 export const sendEmail = async (to, subject, text = "", html = "") => {
   try {
