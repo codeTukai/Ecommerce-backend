@@ -71,14 +71,16 @@ export async function registerUserController(request, response) {
   console.log("EMAIL RESULT:", emailResult);
 
   if (!emailResult.success) {
-    console.log("❌ Error while sending OTP to email:", emailResult.error);
+    console.log(" Error while sending OTP to email:", emailResult.error);
   } else {
-    console.log("✅ OTP successfully sent to the mail");
+    console.log("OTP successfully sent to the mail");
   }
 
 } catch (error) {
-  console.error("❌ Email Sending Error:", error.message);
+  console.error("Email Sending Error:", error.message);
 }
+
+
 
    
     // const token = jwt.sign(
