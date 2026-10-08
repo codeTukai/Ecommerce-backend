@@ -8,7 +8,6 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import dns from 'dns'
-
 import connectDB from './config/connectDB.js'; //  DB connection
 import userRouter from './route/user.route.js'; //  User routes
 import categoryRouter from './route/category.route.js'; //  Category routes
@@ -18,7 +17,8 @@ import myListRouter from './route/mylist.route.js'
 import homeSliderRouter from './route/homeSlider.route.js';
 
 
-
+console.log("EMAIL:", process.env.EMAIL);
+console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
 
 
 const app = express();
